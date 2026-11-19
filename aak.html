@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspeksi Kelayakan CCTV</title>
+  <link rel="stylesheet" href="AK.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+  
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleSidebar()" aria-label="Buka menu"><i class="fa-solid fa-bars"></i></button>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2>CCTV Inspection</h2>
+    <p>PT. Batubara Duaribu Abadi</p>
+  </div>
+  <ul class="nav-menu">
+    <li class="nav-section">Menu Utama</li>
+    <li class="nav-item">
+      <a href="#/dashboard" class="nav-link" data-route="dashboard">
+        <span class="icon"><i class="fa-solid fa-house"></i></span> Dashboard
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#/inspections" class="nav-link" data-route="inspections">
+        <span class="icon"><i class="fa-solid fa-clipboard-list"></i></span> Data Inspeksi
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#/add" class="nav-link" data-route="add">
+        <span class="icon"><i class="fa-solid fa-circle-plus"></i></span> Tambah Data
+      </a>
+    </li>
+    <li class="nav-section">Lainnya</li>
+    <li class="nav-item">
+      <a href="#/about" class="nav-link" data-route="about">
+        <span class="icon"><i class="fa-solid fa-circle-info"></i></span> Tentang
+      </a>
+    </li>
+  </ul>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+  <!-- Dashboard Page -->
+  <div class="page" id="page-dashboard">
+    <div class="page-header">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Ringkasan inspeksi kelayakan CCTV</p>
+      </div>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-card open">
+        <div class="label">Open</div>
+        <div class="value" id="stat-open">0</div>
+      </div>
+      <div class="summary-card close">
+        <div class="label">Close</div>
+        <div class="value" id="stat-close">0</div>
+      </div>
+      <div class="summary-card total">
+        <div class="label">Total Inspeksi</div>
+        <div class="value" id="stat-total">0</div>
+      </div>
+      <div class="summary-card achieve">
+        <div class="label">Achievement</div>
+        <div class="value" id="stat-achieve">0%</div>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <div class="table-scroll">
+        <table class="main-table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Nomor Unit</th>
+              <th>Tgl Inspeksi</th>
+              <th>Status</th>
+              <th>PIC/DIC</th>
+              <th>Due Date</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="dashboardTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inspections Page -->
+  <div class="page" id="page-inspections">
+    <div class="page-header">
+      <div>
+        <h1>Data Inspeksi</h1>
+        <p>Semua data inspeksi kelayakan CCTV</p>
+      </div>
+      <a href="#/add" class="btn btn-lime"><i class="fa-solid fa-camera"></i> Tambah Inspeksi</a>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <input type="text" class="search-box" id="searchInput" placeholder="Cari nomor unit...">
+        <select class="filter-select" id="filterStatus">
+          <option value="">Semua Status</option>
+          <option value="OPEN">OPEN</option>
+          <option value="CLOSE">CLOSE</option>
+          <option value="PERBAIKAN">PERBAIKAN</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <div class="table-scroll">
+        <table class="main-table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Nomor Unit</th>
+              <th>Tgl Inspeksi</th>
+              <th>Temuan</th>
+              <th>Dokumentasi</th>
+              <th>Rekomendasi</th>
+              <th>PIC/DIC</th>
+              <th>Due Date</th>
+              <th>Status</th>
+              <th>Tgl Perbaikan</th>
+              <th>Dok. Perbaikan</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="inspectionsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Page -->
+  <div class="page" id="page-add">
+    <div class="page-header">
+      <div>
+        <h1>Tambah Inspeksi Baru</h1>
+        <p>Formulir penambahan data inspeksi</p>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <form id="addForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nomor Unit</label>
+            <input type="text" id="add_nomor_unit" required>
+          </div>
+          <div class="form-group">
+            <label>Tanggal Inspeksi</label>
+            <input type="date" id="add_pelaksanaan_inspeksi" required>
+          </div>
+          <div class="form-group">
+            <label>Temuan Ketidaksesuaian</label>
+            <input type="text" id="add_temuan" value="BERFUNGSI NORMAL" required>
+          </div>
+          <div class="form-group">
+            <label>Rekomendasi Tindakan</label>
+            <input type="text" id="add_rekomendasi" value="WEEKLY CHECK" required>
+          </div>
+          <div class="form-group">
+            <label>PIC / DIC</label>
+            <input type="text" id="add_pic_dic" value="YUSUF" required>
+          </div>
+          <div class="form-group">
+            <label>Due Date</label>
+            <input type="date" id="add_due_date" required>
+          </div>
+          <div class="form-group">
+            <label>Status Perbaikan</label>
+            <select id="add_status_perbaikan" required>
+              <option value="OPEN">OPEN</option>
+              <option value="CLOSE">CLOSE</option>
+              <option value="PERBAIKAN">PERBAIKAN</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tanggal Perbaikan</label>
+            <input type="date" id="add_tanggal_perbaikan">
+          </div>
+          
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label><i class="fa-solid fa-image"></i> Dokumentasi Temuan</label>
+            <div class="file-upload">
+              <div class="file-input-wrapper">
+                <input type="file" id="add_file_temuan" accept="image/*" onchange="previewImage(this, 'add_preview_temuan', 'add_label_temuan')">
+                <label for="add_file_temuan" class="file-input-label" id="add_label_temuan">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> Klik untuk upload gambar (Max 2MB)
+                </label>
+              </div>
+              <div class="image-preview-container" id="add_preview_temuan">
+                <img src="" alt="Preview" class="image-preview">
+                <button type="button" class="remove-image" onclick="removeImage('add_file_temuan', 'add_preview_temuan', 'add_label_temuan')">×</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label><i class="fa-solid fa-screwdriver-wrench"></i> Dokumentasi Perbaikan</label>
+            <div class="file-upload">
+              <div class="file-input-wrapper">
+                <input type="file" id="add_file_perbaikan" accept="image/*" onchange="previewImage(this, 'add_preview_perbaikan', 'add_label_perbaikan')">
+                <label for="add_file_perbaikan" class="file-input-label" id="add_label_perbaikan">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> Klik untuk upload gambar (Max 2MB)
+                </label>
+              </div>
+              <div class="image-preview-container" id="add_preview_perbaikan">
+                <img src="" alt="Preview" class="image-preview">
+                <button type="button" class="remove-image" onclick="removeImage('add_file_perbaikan', 'add_preview_perbaikan', 'add_label_perbaikan')">×</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <a href="#/inspections" class="btn btn-cancel">Batal</a>
+          <button type="submit" class="btn btn-lime"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Page -->
+  <div class="page" id="page-edit">
+    <div class="page-header">
+      <div>
+        <h1>Edit Inspeksi</h1>
+        <p>Ubah data inspeksi</p>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <form id="editForm">
+        <input type="hidden" id="edit_id">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nomor Unit</label>
+            <input type="text" id="edit_nomor_unit" required>
+          </div>
+          <div class="form-group">
+            <label>Tanggal Inspeksi</label>
+            <input type="date" id="edit_pelaksanaan_inspeksi" required>
+          </div>
+          <div class="form-group">
+            <label>Temuan Ketidaksesuaian</label>
+            <input type="text" id="edit_temuan" required>
+          </div>
+          <div class="form-group">
+            <label>Rekomendasi Tindakan</label>
+            <input type="text" id="edit_rekomendasi" required>
+          </div>
+          <div class="form-group">
+            <label>PIC / DIC</label>
+            <input type="text" id="edit_pic_dic" required>
+          </div>
+          <div class="form-group">
+            <label>Due Date</label>
+            <input type="date" id="edit_due_date" required>
+          </div>
+          <div class="form-group">
+            <label>Status Perbaikan</label>
+            <select id="edit_status_perbaikan" required>
+              <option value="OPEN">OPEN</option>
+              <option value="CLOSE">CLOSE</option>
+              <option value="PERBAIKAN">PERBAIKAN</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tanggal Perbaikan</label>
+            <input type="date" id="edit_tanggal_perbaikan">
+          </div>
+          
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label><i class="fa-solid fa-image"></i> Dokumentasi Temuan</label>
+            <div class="file-upload">
+              <div class="file-input-wrapper">
+                <input type="file" id="edit_file_temuan" accept="image/*" onchange="previewImage(this, 'edit_preview_temuan', 'edit_label_temuan')">
+                <label for="edit_file_temuan" class="file-input-label" id="edit_label_temuan">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> Klik untuk upload gambar (Max 2MB)
+                </label>
+              </div>
+              <div class="image-preview-container" id="edit_preview_temuan">
+                <img src="" alt="Preview" class="image-preview">
+                <button type="button" class="remove-image" onclick="removeImage('edit_file_temuan', 'edit_preview_temuan', 'edit_label_temuan')">×</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label><i class="fa-solid fa-screwdriver-wrench"></i> Dokumentasi Perbaikan</label>
+            <div class="file-upload">
+              <div class="file-input-wrapper">
+                <input type="file" id="edit_file_perbaikan" accept="image/*" onchange="previewImage(this, 'edit_preview_perbaikan', 'edit_label_perbaikan')">
+                <label for="edit_file_perbaikan" class="file-input-label" id="edit_label_perbaikan">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> Klik untuk upload gambar (Max 2MB)
+                </label>
+              </div>
+              <div class="image-preview-container" id="edit_preview_perbaikan">
+                <img src="" alt="Preview" class="image-preview">
+                <button type="button" class="remove-image" onclick="removeImage('edit_file_perbaikan', 'edit_preview_perbaikan', 'edit_label_perbaikan')">×</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <a href="#/inspections" class="btn btn-cancel">Batal</a>
+          <button type="submit" class="btn btn-lime"><i class="fa-solid fa-floppy-disk"></i> Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Detail Page -->
+  <div class="page" id="page-detail">
+    <div class="page-header">
+      <div>
+        <h1>Detail Inspeksi</h1>
+        <p>Informasi lengkap inspeksi</p>
+      </div>
+      <a href="#/inspections" class="btn btn-cancel"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+    </div>
+
+    <div id="detailContent"></div>
+  </div>
+
+  <!-- About Page -->
+  <div class="page" id="page-about">
+    <div class="page-header">
+      <div>
+        <h1>Tentang Aplikasi</h1>
+        <p>Informasi sistem inspeksi CCTV</p>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <h3 style="color: var(--lime); margin-bottom: 15px;">Inspeksi Kelayakan CCTV</h3>
+      <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px;">
+        Aplikasi ini digunakan untuk mencatat dan memantau inspeksi kelayakan CCTV di PT. KWN Jobsite PT Batubara Duaribu Abadi.
+      </p>
+      
+      <div class="detail-item">
+        <div class="label">Versi Aplikasi</div>
+        <div class="value">1.0.0</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">No Form</div>
+        <div class="value">FRM-17-SHE-103</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Tanggal Terbit</div>
+        <div class="value">18 Agustus 2026</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close">×</button>
+  <img src="" alt="Full Size" class="lightbox-img" id="lightboxImg" onclick="event.stopPropagation()">
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+
+
+  <script src="AK.js" defer></script>
+</body>
+</html>
